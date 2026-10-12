@@ -238,7 +238,7 @@
         let prizes = [];
         const canvas = document.getElementById('wheelCanvas');
         const ctx = canvas.getContext('2d');
-        let currentRotation = 0; // Theo dõi góc quay tổng thể để không bị lệch qua các lần quay
+        let currentRotation = 0; 
         let isSpinning = false;
 
         async function loadPrizesFromSheet() {
@@ -263,8 +263,8 @@
             const arcSize = (2 * Math.PI) / numSegments;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Góc cơ sở để ô đầu tiên (index 0) nằm chính giữa ở đỉnh (3 * Math.PI / 2) khi rotationOffset = 0
-            const baseAngle = 3 * Math.PI / 2 - arcSize / 2;
+            // 📐 Định nghĩa góc chuẩn: Ô số 0 bắt đầu từ đỉnh (3 * Math.PI / 2)
+            const baseAngle = 3 * Math.PI / 2;
             let currentAngle = baseAngle + rotationOffset;
 
             for (let i = 0; i < numSegments; i++) {
@@ -307,7 +307,7 @@
                 return;
             }
 
-            // [LƯU Ý]: Nếu bạn muốn test đi test lại không bị giới hạn 1 lần/ngày, hãy tạm thời xóa đoạn code localStorage này
+            // [LƯU Ý]: Nếu bạn muốn test liên tục không bị chặn 1 lần/ngày, hãy xóa đoạn localStorage này
             let todayKey = "spun_" + userInfo + "_" + new Date().toISOString().slice(0, 10);
             if (localStorage.getItem(todayKey)) {
                 alert("⚠️ Hôm nay bạn đã dùng hết lượt quay! Vui lòng quay lại vào ngày mai.");
@@ -356,17 +356,18 @@
             const numSegments = prizes.length;
             const arcSize = (2 * Math.PI) / numSegments;
             
-            // 🎯 THUẬT TOÁN ĐỒ HỌA MỚI: Tính góc đích chuẩn xác tuyệt đối để tâm ô trúng thưởng dừng đúng ngay dưới kim chỉ ở đỉnh
-            let targetMod = (-winningIndex * arcSize) % (2 * Math.PI);
+            // 🎯 THUẬT TOÁN TÍNH GÓC DỪNG CHUẨN XÁC TUYỆT ĐỐI (Đưa tâm ô trúng thưởng về đúng 3 * Math.PI / 2 ở đỉnh)
+            let targetMod = 2 * Math.PI - (winningIndex * arcSize) - (arcSize / 2);
+            targetMod = targetMod % (2 * Math.PI);
             if (targetMod < 0) targetMod += 2 * Math.PI;
 
             let currentMod = currentRotation % (2 * Math.PI);
             if (currentMod < 0) currentMod += 2 * Math.PI;
 
             let diff = targetMod - currentMod;
-            if (diff < 0) diff += 2 * Math.PI;
+            if (diff <= 0) diff += 2 * Math.PI;
 
-            const fullTurns = 12; // Số vòng quay tối thiểu trước khi dừng
+            const fullTurns = 12; // Số vòng quay tối thiểu
             const totalRotation = currentRotation + (fullTurns * 2 * Math.PI) + diff;
             const startRotation = currentRotation;
 
@@ -377,7 +378,7 @@
                 if (!startTime) startTime = timestamp;
                 let elapsed = timestamp - startTime;
                 let progress = Math.min(elapsed / spinDuration, 1);
-                let easeProgress = 1 - Math.pow(1 - progress, 3); // Hiệu ứng giảm tốc mượt mà
+                let easeProgress = 1 - Math.pow(1 - progress, 3); // Giảm tốc mượt
                 
                 let animatedRotation = startRotation + ((totalRotation - startRotation) * easeProgress);
                 drawWheel(animatedRotation);
@@ -385,7 +386,7 @@
                 if (progress < 1) {
                     requestAnimationFrame(animateSpin);
                 } else {
-                    currentRotation = totalRotation; // Lưu lại vị trí góc quay hiện tại
+                    currentRotation = totalRotation;
                     document.getElementById('resultText').innerText = wonPrize;
                     document.getElementById('resultModal').classList.add('show');
                     confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
