@@ -10,49 +10,53 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
         
         body {
-            background: linear-gradient(135deg, #fff5e6 0%, #ffebcc 100%);
-            color: #333; min-height: 100vh; display: flex; flex-direction: column; align-items: center; 
-            padding: 20px 12px 40px 12px;
+            background: linear-gradient(135deg, #2a0000 0%, #1a0000 50%, #0d0000 100%);
+            color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; 
+            padding: 15px 12px 40px 12px;
         }
 
         .main-wrapper {
             width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center;
         }
 
+        /* HEADER & LƯỢT QUAY */
         .header-container {
-            text-align: center; margin-bottom: 20px; 
+            text-align: center; margin-bottom: 15px; 
             background: linear-gradient(135deg, #d32f2f, #8b0000);
-            padding: 18px 15px; border-radius: 20px; 
+            padding: 15px; border-radius: 20px; 
             border: 3px solid #ffd700;
-            box-shadow: 0 10px 30px rgba(153, 0, 0, 0.4), inset 0 2px 6px rgba(255,255,255,0.25); 
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4), inset 0 2px 6px rgba(255,255,255,0.3); 
             width: 100%;
         }
 
-        h1 { 
-            font-size: 18px; font-weight: 900; color: #ffd700;
-            text-transform: uppercase; margin-bottom: 12px; 
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5); letter-spacing: 0.5px;
+        .spins-counter {
+            font-size: 16px; font-weight: 900; color: #ffd700;
+            text-transform: uppercase; margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+            letter-spacing: 1px;
         }
 
         .nav-btn-box {
-            display: flex; flex-direction: column; gap: 8px; width: 100%;
+            display: flex; gap: 8px; width: 100%; justify-content: center;
         }
 
         .nav-button {
-            background: rgba(180, 0, 0, 0.6);
+            background: rgba(120, 0, 0, 0.8);
             border: 2px solid #ffd700; border-radius: 30px;
-            padding: 10px 18px; color: #fff; font-weight: 700; font-size: 12px;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 8px 14px; color: #fff; font-weight: 700; font-size: 12px;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
             cursor: pointer; text-decoration: none; transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            flex: 1;
         }
-        .nav-button:hover { background: rgba(220, 0, 0, 0.8); transform: translateY(-1px); }
+        .nav-button:hover { background: rgba(180, 0, 0, 1); transform: translateY(-1px); }
 
         .user-input-box {
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.5);
             border: 2px solid #ffd700; border-radius: 30px;
             padding: 8px 12px; display: flex; align-items: center;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
+            margin-bottom: 10px;
         }
         .user-input-box input {
             width: 100%; border: none; background: transparent; color: #ffd700; 
@@ -60,37 +64,45 @@
         }
         .user-input-box input::placeholder { color: rgba(255, 215, 0, 0.6); font-weight: 600; }
 
-        #loadingText { color: #ffff80; font-size: 11px; font-weight: 600; margin-top: 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        #loadingText { color: #ffff80; font-size: 11px; font-weight: 600; margin-top: 8px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
+        /* VÒNG QUAY LED DELUXE */
         .wheel-outer {
-            width: 100%; max-width: 330px; margin: 10px auto 20px auto;
+            width: 100%; max-width: 350px; margin: 10px auto 20px auto;
         }
         .wheel-container { 
             position: relative; 
             width: 100%; 
             padding-top: 100%; 
-            background: linear-gradient(135deg, #e60000, #730000);
+            background: linear-gradient(135deg, #ff0000, #800000);
             border-radius: 50%; 
-            box-shadow: 0 12px 35px rgba(153, 0, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.5);
-            border: 4px solid #ffd700;
-            overflow: hidden; 
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.6);
+            border: 6px solid #ffd700;
+            overflow: visible; 
+        }
+
+        /* 💡 DÃY ĐÈN LED PHÁT SÁNG XUNG QUANH VIỀN[span_4](start_span)[span_4](end_span) */
+        .led-light {
+            position: absolute; width: 12px; height: 12px; background: #fff;
+            border-radius: 50%; box-shadow: 0 0 8px #ffd700, 0 0 15px #ff4500;
+            z-index: 25; animation: ledGlow 1s infinite alternate;
+        }
+        @keyframes ledGlow {
+            from { background: #fff; box-shadow: 0 0 5px #ffd700; }
+            to { background: #ffd700; box-shadow: 0 0 12px #ff0000, 0 0 20px #ffff00; }
         }
 
         .wheel-inner {
             position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            padding: 10px;
+            top: 8px; left: 8px; right: 8px; bottom: 8px;
+            border-radius: 50%;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
+            background: #fff;
+            border: 3px solid #ffd700;
         }
-        
-        .wheel-container::after {
-            content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
-            border-radius: 50%; border: 3px dotted #ffd700; pointer-events: none;
-            animation: rotateLed 15s linear infinite; opacity: 0.8; z-index: 2;
-        }
-        @keyframes rotateLed { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         canvas {
             width: 100% !important; 
@@ -100,32 +112,34 @@
         }
 
         .wheel-pointer {
-            position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
             width: 0; height: 0; 
-            border-left: 12px solid transparent; 
-            border-right: 12px solid transparent;
-            border-top: 26px solid #ffd700; 
-            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.6));
-            z-index: 20;
+            border-left: 14px solid transparent; 
+            border-right: 14px solid transparent;
+            border-top: 30px solid #ffd700; 
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.7));
+            z-index: 30;
         }
 
         .center-btn {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 22%; height: 22%; min-width: 60px; min-height: 60px;
-            background: radial-gradient(circle, #ff4d4d 0%, #cc0000 70%, #7a0000 100%);
-            border: 3px solid #ffd700; border-radius: 50%; 
-            color: #fff; font-weight: 900; font-size: 14px; letter-spacing: 0.5px;
-            cursor: pointer; z-index: 15; text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255,255,255,0.4);
+            width: 24%; height: 24%; min-width: 65px; min-height: 65px;
+            background: radial-gradient(circle, #ff4d4d 0%, #cc0000 70%, #5a0000 100%);
+            border: 3.5px solid #ffd700; border-radius: 50%; 
+            color: #fff; font-weight: 900; font-size: 15px; letter-spacing: 0.5px;
+            cursor: pointer; z-index: 20; text-align: center;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), inset 0 2px 6px rgba(255,255,255,0.5);
             transition: all 0.2s;
         }
-        .center-btn:hover:not(:disabled) { transform: translate(-50%, -50%) scale(1.05); }
+        .center-btn:hover:not(:disabled) { transform: translate(-50%, -50%) scale(1.08); }
         .center-btn:disabled { background: #444; border-color: #666; color: #990; cursor: not-allowed; }
 
+        /* THỂ LỆ */
         .rules-card {
-            background: #ffffff; width: 100%; border-radius: 18px;
-            border: 2.5px solid #ff4d4d; padding: 18px;
-            box-shadow: 0 8px 25px rgba(210, 47, 47, 0.15);
+            background: linear-gradient(145deg, #ffffff, #fff5e6); 
+            color: #333; width: 100%; border-radius: 18px;
+            border: 2.5px solid #ffd700; padding: 18px;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
         }
         .rules-title {
             text-align: center; color: #d32f2f; font-size: 14px; font-weight: 900;
@@ -136,6 +150,7 @@
         .rules-section p, .rules-section li { font-size: 11px; color: #555; line-height: 1.4; }
         .rules-section ul { padding-left: 15px; }
 
+        /* MODAL */
         .modal {
             visibility: hidden; opacity: 0;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -149,9 +164,9 @@
         }
         .modal-content {
             background: linear-gradient(145deg, #ffffff, #fff5e6); 
-            border: 3px solid #d32f2f; padding: 20px 16px;
+            color: #333; border: 3px solid #d32f2f; padding: 20px 16px;
             border-radius: 22px; width: 90%; max-width: 360px; text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
         }
         .modal-content h2 { font-size: 17px; font-weight: 900; color: #d32f2f; margin-bottom: 8px; }
         
@@ -175,29 +190,29 @@
 
     <div class="main-wrapper">
         <div class="header-container">
-            <h1>VÒNG QUAY DELUXE GAMING</h1>
+            <div class="spins-counter" id="spinsCounterText">Lượt quay: --</div>
             
+            <div class="user-input-box">
+                <input type="text" id="userInfoInput" placeholder="Nhập User ID của bạn...">
+            </div>
+
             <div class="nav-btn-box">
                 <a href="https://vpnsieucap.shop" target="_blank" class="nav-button">
-                    <span>← Về Cửa Hàng</span>
+                    <span>← Cửa Hàng</span>
                 </a>
-                
-                <div class="user-input-box">
-                    <input type="text" id="userInfoInput" placeholder="Nhập User ID của bạn...">
-                </div>
-
                 <button class="nav-button" onclick="openHistory()">
-                    <span>⏱ Lịch Sử Quay</span>
+                    <span>⏱ Lịch Sử</span>
                 </button>
             </div>
 
             <div id="loadingText">⏳ Đang kết nối máy chủ bảo mật...</div>
         </div>
 
+        <!-- VÒNG QUAY LED DELUXE -->
         <div class="wheel-outer">
-            <div class="wheel-container">
+            <div class="wheel-container" id="wheelContainerDiv">
+                <div class="wheel-pointer"></div>
                 <div class="wheel-inner">
-                    <div class="wheel-pointer"></div>
                     <canvas id="wheelCanvas" width="400" height="400"></canvas>
                     <button class="center-btn" id="spinBtn" onclick="startSpin()" disabled>QUAY</button>
                 </div>
@@ -258,6 +273,25 @@
         let currentRotation = 0; 
         let isSpinning = false;
 
+        // 💡 TẠO CÁC ĐÈN LED XUNG QUANH VIỀN TỰ ĐỘNG
+        function createLeds() {
+            const container = document.getElementById('wheelContainerDiv');
+            const totalLeds = 16;
+            for (let i = 0; i < totalLeds; i++) {
+                let angle = (i / totalLeds) * 2 * Math.PI;
+                let x = 50 + 44 * Math.sin(angle);
+                let y = 50 - 44 * Math.cos(angle);
+                
+                let led = document.createElement('div');
+                led.className = 'led-light';
+                led.style.left = x + '%';
+                led.style.top = y + '%';
+                led.style.animationDelay = (i * 0.1) + 's';
+                container.appendChild(led);
+            }
+        }
+        createLeds();
+
         async function loadPrizesFromSheet() {
             try {
                 let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPrizes`);
@@ -267,6 +301,7 @@
                     drawWheel(currentRotation);
                     document.getElementById('loadingText').innerText = "✅ Sẵn sàng quay thưởng!";
                     document.getElementById('spinBtn').disabled = false;
+                    document.getElementById('spinsCounterText').innerText = "Lượt quay: 1 (Hôm nay)";
                 }
             } catch (err) {
                 document.getElementById('loadingText').innerText = "❌ Lỗi kết nối máy chủ!";
@@ -280,9 +315,9 @@
             const arcSize = (2 * Math.PI) / numSegments;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // ✨ VẼ NỀN VÀNG KIM TUYẾN SANG TRỌNG BÊN TRONG CANVAS (Không dùng CSS background)
+            // Nền tâm canvas
             ctx.beginPath();
-            ctx.fillStyle = "#fff8e7";
+            ctx.fillStyle = "#fffaf0";
             ctx.arc(200, 200, 195, 0, 2 * Math.PI);
             ctx.fill();
 
@@ -297,7 +332,6 @@
                 ctx.lineTo(200, 200);
                 ctx.fill();
                 
-                // Viền ngăn cách giữa các ô cực kỳ sắc nét và sang trọng
                 ctx.lineWidth = 3;
                 ctx.strokeStyle = "#ffd700";
                 ctx.stroke();
@@ -307,8 +341,7 @@
                 ctx.rotate(currentAngle + arcSize / 2);
                 ctx.textAlign = "right";
                 
-                // Hiệu ứng bóng chữ sắc nét, dễ đọc trên mọi màu nền
-                ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+                ctx.shadowColor = "rgba(0, 0, 0, 0.8)";
                 ctx.shadowBlur = 4;
                 ctx.fillStyle = "#ffffff";
                 ctx.font = "bold 13px 'Montserrat', sans-serif";
@@ -322,7 +355,7 @@
                 currentAngle += arcSize;
             }
 
-            // Viền vàng ngoài cùng của vòng quay
+            // Viền vàng ngoài cùng của canvas
             ctx.beginPath();
             ctx.arc(200, 200, 190, 0, 2 * Math.PI);
             ctx.lineWidth = 4;
@@ -366,6 +399,7 @@
                     spinBtn.disabled = false;
                     userInfoInput.disabled = false;
                     spinBtn.innerText = "QUAY";
+                    document.getElementById('spinsCounterText').innerText = "Lượt quay: 0 (Hết lượt)";
                     return;
                 }
 
@@ -383,6 +417,7 @@
 
             localStorage.setItem(todayKey, "true");
             spinBtn.innerText = "QUAY";
+            document.getElementById('spinsCounterText').innerText = "Lượt quay: 0 (Đã quay)";
 
             let winningIndex = prizes.findIndex(p => p.name === wonPrize);
             if (winningIndex === -1) winningIndex = 0;
