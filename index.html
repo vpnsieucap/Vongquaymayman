@@ -213,7 +213,7 @@
                     <span>← Cửa Hàng</span>
                 </a>
                 <button class="nav-button" onclick="openHistory()">
-                    <span>⏱ Lịch Sử</span>
+                    <span>⏱ Lịch Sử (3 Ngày)</span>
                 </button>
             </div>
 
@@ -266,7 +266,7 @@
     <!-- MODAL LỊCH SỬ -->
     <div class="modal" id="historyModal">
         <div class="modal-content">
-            <h2>⏱ LỊCH SỬ QUAY</h2>
+            <h2>⏱ LỊCH SỬ QUAY (3 NGÀY)</h2>
             <p id="historyUserTitle" style="font-size: 12px; color: #555; font-weight: 600;"></p>
             <div class="history-list" id="historyListContainer">
                 <p style="text-align: center; font-size: 11px; color: #888; padding: 15px;">Đang tải lịch sử...</p>
@@ -399,9 +399,12 @@
                 let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=trySpin&sdt=${encodeURIComponent(userInfo)}`);
                 let data = await res.json();
                 
+                // Đã fix lỗi: chỉ lưu localStorage nếu thực sự đã quay, không lưu khi tài khoản chưa tồn tại
                 if (data.status === "khong_ton_tai" || data.status === "da_quay") {
                     alert(data.message);
-                    localStorage.setItem(todayKey, "true");
+                    if (data.status === "da_quay") {
+                        localStorage.setItem(todayKey, "true");
+                    }
                     isSpinning = false;
                     spinBtn.disabled = false;
                     userInfoInput.disabled = false;
@@ -476,7 +479,7 @@
                 return;
             }
 
-            document.getElementById('historyUserTitle').innerText = "User ID: " + userInfo;
+            document.getElementById('historyUserTitle').innerText = "Tài khoản: " + userInfo;
             document.getElementById('historyListContainer').innerHTML = '<p style="text-align: center; font-size: 11px; color: #888; padding: 15px;">Đang tải lịch sử...</p>';
             document.getElementById('historyModal').classList.add('show');
 
@@ -486,11 +489,33 @@
 
                 let container = document.getElementById('historyListContainer');
                 if (data.status === "success" && data.history.length > 0) {
-                    let html = "";
-                    data.history.forEach(item => {
-                        html += `<div class="history-item">🕒 <b>${item.time}</b><br>🎁 Trúng: <span style="color: #d32f2f; font-weight: bold;">${item.prize}</span></div>`;
+                    // 🛡️ Lọc chỉ lấy lịch sử trong vòng 3 ngày gần nhất
+                    let today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    let retentionDays = 3;
+
+                    let filteredHistory = data.history.filter(item => {
+                        if (!item.date) return true;
+                        let parts = item.date.split("-");
+                        if (parts.length === 3) {
+                            let itemDate = new Date(parts[0], parts[1] - 1, parts[2]);
+                            itemDate.setHours(0, 0, 0, 0);
+                            let diffTime = today.getTime() - itemDate.getTime();
+                            let diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+                            return diffDays <= retentionDays;
+                        }
+                        return true;
                     });
-                    container.innerHTML = html;
+
+                    if (filteredHistory.length > 0) {
+                        let html = "";
+                        filteredHistory.forEach(item => {
+                            html += `<div class="history-item">🕒 <b>${item.time}</b><br>🎁 Trúng: <span style="color: #d32f2f; font-weight: bold;">${item.prize}</span></div>`;
+                        });
+                        container.innerHTML = html;
+                    } else {
+                        container.innerHTML = '<p style="text-align: center; font-size: 11px; color: #888; padding: 15px;">Không có lịch sử trong 3 ngày gần đây.</p>';
+                    }
                 } else {
                     container.innerHTML = '<p style="text-align: center; font-size: 11px; color: #888; padding: 15px;">Chưa có lịch sử quay thưởng nào.</p>';
                 }
