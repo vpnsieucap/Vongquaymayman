@@ -62,59 +62,62 @@
 
         #loadingText { color: #ffff80; font-size: 11px; font-weight: 600; margin-top: 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
-        /* 🛠️ FIX CHUẨN 1:1 TUYỆT ĐỐI CHO CẢ PC VÀ MOBILE (Không bao giờ méo) */
+        .wheel-outer {
+            width: 100%; max-width: 330px; margin: 10px auto 20px auto;
+        }
         .wheel-container { 
             position: relative; 
             width: 100%; 
-            max-width: 330px; 
-            aspect-ratio: 1 / 1; 
-            margin: 10px auto 20px auto; 
+            padding-top: 100%; 
             background: linear-gradient(135deg, #e60000, #730000);
             border-radius: 50%; 
-            padding: 12px;
-            display: flex; 
-            justify-content: center; 
-            align-items: center;
             box-shadow: 0 12px 35px rgba(153, 0, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.5);
             border: 4px solid #ffd700;
-            flex-shrink: 0;
             overflow: hidden; 
+        }
+
+        .wheel-inner {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .wheel-container::after {
             content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
             border-radius: 50%; border: 3px dotted #ffd700; pointer-events: none;
-            animation: rotateLed 15s linear infinite; opacity: 0.8;
+            animation: rotateLed 15s linear infinite; opacity: 0.8; z-index: 2;
         }
         @keyframes rotateLed { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
+        /* 🛡️ TRIỆT TIÊU LỖI VỆT TRẮNG: Xóa hẳn background white và box-shadow của canvas */
         canvas {
             width: 100% !important; 
             height: 100% !important;
-            aspect-ratio: 1 / 1;
             border-radius: 50%; 
-            background: #fff;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.3); 
+            background: transparent; 
             display: block;
         }
 
         .wheel-pointer {
-            position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
+            position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
             width: 0; height: 0; 
             border-left: 12px solid transparent; 
             border-right: 12px solid transparent;
             border-top: 26px solid #ffd700; 
             filter: drop-shadow(0 3px 5px rgba(0,0,0,0.6));
-            z-index: 10;
+            z-index: 20;
         }
 
         .center-btn {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 22%; height: 22%; min-width: 65px; min-height: 65px;
+            width: 22%; height: 22%; min-width: 60px; min-height: 60px;
             background: radial-gradient(circle, #ff4d4d 0%, #cc0000 70%, #7a0000 100%);
             border: 3px solid #ffd700; border-radius: 50%; 
             color: #fff; font-weight: 900; font-size: 14px; letter-spacing: 0.5px;
-            cursor: pointer; z-index: 5; text-align: center;
+            cursor: pointer; z-index: 15; text-align: center;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255,255,255,0.4);
             transition: all 0.2s;
         }
@@ -193,10 +196,14 @@
             <div id="loadingText">⏳ Đang kết nối máy chủ bảo mật...</div>
         </div>
 
-        <div class="wheel-container">
-            <div class="wheel-pointer"></div>
-            <canvas id="wheelCanvas" width="400" height="400"></canvas>
-            <button class="center-btn" id="spinBtn" onclick="startSpin()" disabled>QUAY</button>
+        <div class="wheel-outer">
+            <div class="wheel-container">
+                <div class="wheel-inner">
+                    <div class="wheel-pointer"></div>
+                    <canvas id="wheelCanvas" width="400" height="400"></canvas>
+                    <button class="center-btn" id="spinBtn" onclick="startSpin()" disabled>QUAY</button>
+                </div>
+            </div>
         </div>
 
         <div class="rules-card">
@@ -398,6 +405,7 @@
                     currentRotation = totalRotation;
                     document.getElementById('resultText').innerText = wonPrize;
                     document.getElementById('resultModal').classList.add('show');
+                    
                     confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
                     spinBtn.innerText = "ĐÃ QUAY";
                 }
