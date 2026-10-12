@@ -12,36 +12,36 @@
         body {
             background: linear-gradient(135deg, #fff5e6 0%, #ffebcc 100%);
             color: #333; min-height: 100vh; display: flex; flex-direction: column; align-items: center; 
-            padding: 20px 15px 40px 15px;
+            padding: 20px 12px 40px 12px;
         }
 
         .main-wrapper {
-            width: 100%; max-width: 460px; display: flex; flex-direction: column; align-items: center;
+            width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center;
         }
 
         .header-container {
-            text-align: center; margin-bottom: 25px; 
+            text-align: center; margin-bottom: 20px; 
             background: linear-gradient(135deg, #d32f2f, #8b0000);
-            padding: 20px 18px; border-radius: 22px; 
+            padding: 18px 15px; border-radius: 20px; 
             border: 3px solid #ffd700;
             box-shadow: 0 10px 30px rgba(153, 0, 0, 0.4), inset 0 2px 6px rgba(255,255,255,0.25); 
             width: 100%;
         }
 
         h1 { 
-            font-size: 19px; font-weight: 900; color: #ffd700;
-            text-transform: uppercase; margin-bottom: 15px; 
+            font-size: 18px; font-weight: 900; color: #ffd700;
+            text-transform: uppercase; margin-bottom: 12px; 
             text-shadow: 0 2px 4px rgba(0,0,0,0.5); letter-spacing: 0.5px;
         }
 
         .nav-btn-box {
-            display: flex; flex-direction: column; gap: 10px; width: 100%;
+            display: flex; flex-direction: column; gap: 8px; width: 100%;
         }
 
         .nav-button {
             background: rgba(180, 0, 0, 0.6);
             border: 2px solid #ffd700; border-radius: 30px;
-            padding: 12px 20px; color: #fff; font-weight: 700; font-size: 13px;
+            padding: 10px 18px; color: #fff; font-weight: 700; font-size: 12px;
             display: flex; align-items: center; justify-content: center; gap: 8px;
             cursor: pointer; text-decoration: none; transition: all 0.2s;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
@@ -51,27 +51,29 @@
         .user-input-box {
             background: rgba(0, 0, 0, 0.35);
             border: 2px solid #ffd700; border-radius: 30px;
-            padding: 10px 15px; display: flex; align-items: center;
+            padding: 8px 12px; display: flex; align-items: center;
             box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
         }
         .user-input-box input {
             width: 100%; border: none; background: transparent; color: #ffd700; 
-            font-size: 14px; font-weight: 700; text-align: center; outline: none;
+            font-size: 13px; font-weight: 700; text-align: center; outline: none;
         }
         .user-input-box input::placeholder { color: rgba(255, 215, 0, 0.6); font-weight: 600; }
 
-        #loadingText { color: #ffff80; font-size: 11px; font-weight: 600; margin-top: 12px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        #loadingText { color: #ffff80; font-size: 11px; font-weight: 600; margin-top: 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
+        /* 🛠️ SỬA LỖI RESPONSIVE: Dùng aspect-ratio để vòng quay luôn tròn và co giãn chuẩn trên mọi màn hình */
         .wheel-container { 
-            position: relative; width: 360px; height: 360px; margin: 5px auto 25px auto; 
+            position: relative; width: 100%; max-width: 340px; aspect-ratio: 1 / 1; 
+            margin: 5px auto 20px auto; 
             background: linear-gradient(135deg, #e60000, #730000);
-            border-radius: 50%; padding: 14px;
+            border-radius: 50%; padding: 12px;
             box-shadow: 0 12px 35px rgba(153, 0, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.5);
             border: 4px solid #ffd700;
         }
         
         .wheel-container::after {
-            content: ''; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px;
+            content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
             border-radius: 50%; border: 3px dotted #ffd700; pointer-events: none;
             animation: rotateLed 15s linear infinite; opacity: 0.8;
         }
@@ -79,45 +81,45 @@
 
         canvas {
             width: 100%; height: 100%; border-radius: 50%; background: #fff;
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.3); display: block;
         }
 
         .wheel-pointer {
-            position: absolute; top: -3px; left: 50%; transform: translateX(-50%);
+            position: absolute; top: -4px; left: 50%; transform: translateX(-50%);
             width: 0; height: 0; 
-            border-left: 13px solid transparent; 
-            border-right: 13px solid transparent;
-            border-top: 28px solid #ffd700; 
-            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.6));
+            border-left: 12px solid transparent; 
+            border-right: 12px solid transparent;
+            border-top: 26px solid #ffd700; 
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.6));
             z-index: 10;
         }
 
         .center-btn {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 78px; height: 78px; 
+            width: 22%; height: 22%; min-width: 65px; min-height: 65px;
             background: radial-gradient(circle, #ff4d4d 0%, #cc0000 70%, #7a0000 100%);
-            border: 3.5px solid #ffd700; border-radius: 50%; 
-            color: #fff; font-weight: 900; font-size: 15px; letter-spacing: 1px;
+            border: 3px solid #ffd700; border-radius: 50%; 
+            color: #fff; font-weight: 900; font-size: 14px; letter-spacing: 0.5px;
             cursor: pointer; z-index: 5; text-align: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 3px 6px rgba(255,255,255,0.4);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5), inset 0 2px 5px rgba(255,255,255,0.4);
             transition: all 0.2s;
         }
         .center-btn:hover:not(:disabled) { transform: translate(-50%, -50%) scale(1.05); }
         .center-btn:disabled { background: #444; border-color: #666; color: #990; cursor: not-allowed; }
 
         .rules-card {
-            background: #ffffff; width: 100%; border-radius: 20px;
-            border: 2.5px solid #ff4d4d; padding: 20px;
+            background: #ffffff; width: 100%; border-radius: 18px;
+            border: 2.5px solid #ff4d4d; padding: 18px;
             box-shadow: 0 8px 25px rgba(210, 47, 47, 0.15);
         }
         .rules-title {
-            text-align: center; color: #d32f2f; font-size: 15px; font-weight: 900;
-            text-transform: uppercase; margin-bottom: 12px;
+            text-align: center; color: #d32f2f; font-size: 14px; font-weight: 900;
+            text-transform: uppercase; margin-bottom: 10px;
         }
-        .rules-section { margin-bottom: 12px; }
-        .rules-section h4 { font-size: 12px; font-weight: 700; color: #333; margin-bottom: 4px; }
-        .rules-section p, .rules-section li { font-size: 11px; color: #555; line-height: 1.5; }
-        .rules-section ul { padding-left: 16px; }
+        .rules-section { margin-bottom: 10px; }
+        .rules-section h4 { font-size: 12px; font-weight: 700; color: #333; margin-bottom: 3px; }
+        .rules-section p, .rules-section li { font-size: 11px; color: #555; line-height: 1.4; }
+        .rules-section ul { padding-left: 15px; }
 
         .modal {
             visibility: hidden; opacity: 0;
@@ -131,28 +133,28 @@
         }
         .modal-content {
             background: linear-gradient(145deg, #ffffff, #fff5e6); 
-            border: 3px solid #d32f2f; padding: 22px 18px;
-            border-radius: 24px; width: 90%; max-width: 380px; text-align: center;
+            border: 3px solid #d32f2f; padding: 20px 16px;
+            border-radius: 22px; width: 90%; max-width: 360px; text-align: center;
             box-shadow: 0 15px 40px rgba(0,0,0,0.4);
             transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .modal.show .modal-content {
             transform: scale(1);
         }
-        .modal-content h2 { font-size: 18px; font-weight: 900; color: #d32f2f; margin-bottom: 10px; }
+        .modal-content h2 { font-size: 17px; font-weight: 900; color: #d32f2f; margin-bottom: 8px; }
         
         .btn-modal {
             background: linear-gradient(135deg, #d32f2f, #990000); color: #fff; font-weight: 800;
-            padding: 11px 20px; border: none; border-radius: 25px; cursor: pointer; margin-top: 15px; width: 100%;
-            font-size: 13px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
+            padding: 10px 18px; border: none; border-radius: 25px; cursor: pointer; margin-top: 12px; width: 100%;
+            font-size: 12px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
         }
 
         .history-list {
-            max-height: 220px; overflow-y: auto; text-align: left; margin: 12px 0;
-            border: 1px solid #ddd; border-radius: 10px; padding: 8px; background: #fff;
+            max-height: 200px; overflow-y: auto; text-align: left; margin: 10px 0;
+            border: 1px solid #ddd; border-radius: 10px; padding: 6px; background: #fff;
         }
         .history-item {
-            font-size: 11px; padding: 6px 8px; border-bottom: 1px dashed #eee; color: #333;
+            font-size: 11px; padding: 5px 6px; border-bottom: 1px dashed #eee; color: #333;
         }
         .history-item:last-child { border-bottom: none; }
     </style>
@@ -213,7 +215,7 @@
     <div class="modal" id="resultModal">
         <div class="modal-content">
             <h2>🎉 CHÚC MỪNG BẠN! 🎉</h2>
-            <p id="resultText" style="font-size: 17px; margin: 12px 0; color: #d32f2f; font-weight: 800;"></p>
+            <p id="resultText" style="font-size: 16px; margin: 10px 0; color: #d32f2f; font-weight: 800;"></p>
             <p style="font-size: 11px; color: #666; line-height: 1.4;">Hệ thống VPNSIEUCAP sẽ xác minh và tự động trao phần thưởng cho User ID của bạn!</p>
             <button class="btn-modal" onclick="closeModal()">Đã Hiểu</button>
         </div>
@@ -225,7 +227,7 @@
             <h2>⏱ LỊCH SỬ QUAY</h2>
             <p id="historyUserTitle" style="font-size: 12px; color: #555; font-weight: 600;"></p>
             <div class="history-list" id="historyListContainer">
-                <p style="text-align: center; font-size: 11px; color: #888; padding: 20px;">Đang tải lịch sử...</p>
+                <p style="text-align: center; font-size: 11px; color: #888; padding: 15px;">Đang tải lịch sử...</p>
             </div>
             <button class="btn-modal" onclick="closeHistoryModal()">Đóng</button>
         </div>
@@ -246,7 +248,6 @@
                 let data = await res.json();
                 if (data.status === "success" && data.prizes.length > 0) {
                     prizes = data.prizes;
-                    // Căn chỉnh góc ban đầu để kim ở đỉnh chỉ đúng giữa ô đầu tiên
                     const arcSize = (2 * Math.PI) / prizes.length;
                     startAngle = 3 * Math.PI / 2 - arcSize / 2;
                     drawWheel();
@@ -354,7 +355,6 @@
             const numSegments = prizes.length;
             const arcSize = (2 * Math.PI) / numSegments;
             
-            // 🎯 Tính toán góc đích cực kỳ chính xác để kim ở đỉnh chỉ đúng giữa ô trúng thưởng
             const targetStartAngle = 3 * Math.PI / 2 - (winningIndex * arcSize + arcSize / 2);
             let currentMod = startAngle % (2 * Math.PI);
             let targetMod = targetStartAngle % (2 * Math.PI);
@@ -397,7 +397,7 @@
             }
 
             document.getElementById('historyUserTitle').innerText = "User ID: " + userInfo;
-            document.getElementById('historyListContainer').innerHTML = '<p style="text-align: center; font-size: 11px; color: #888; padding: 20px;">Đang tải lịch sử...</p>';
+            document.getElementById('historyListContainer').innerHTML = '<p style="text-align: center; font-size: 11px; color: #888; padding: 15px;">Đang tải lịch sử...</p>';
             document.getElementById('historyModal').classList.add('show');
 
             try {
@@ -412,10 +412,10 @@
                     });
                     container.innerHTML = html;
                 } else {
-                    container.innerHTML = '<p style="text-align: center; font-size: 11px; color: #888; padding: 20px;">Chưa có lịch sử quay thưởng nào.</p>';
+                    container.innerHTML = '<p style="text-align: center; font-size: 11px; color: #888; padding: 15px;">Chưa có lịch sử quay thưởng nào.</p>';
                 }
             } catch (err) {
-                document.getElementById('historyListContainer').innerHTML = '<p style="text-align: center; font-size: 11px; color: #e60000; padding: 20px;">Không thể tải lịch sử.</p>';
+                document.getElementById('historyListContainer').innerHTML = '<p style="text-align: center; font-size: 11px; color: #e60000; padding: 15px;">Không thể tải lịch sử.</p>';
             }
         }
 
