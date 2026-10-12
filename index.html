@@ -10,8 +10,8 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
         
         body {
-            background: linear-gradient(135deg, #2a0000 0%, #1a0000 50%, #0d0000 100%);
-            color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; 
+            background: linear-gradient(135deg, #fff5e6 0%, #ffebcc 50%, #ffd699 100%);
+            color: #333; min-height: 100vh; display: flex; flex-direction: column; align-items: center; 
             padding: 15px 12px 40px 12px;
         }
 
@@ -25,15 +25,15 @@
             background: linear-gradient(135deg, #d32f2f, #8b0000);
             padding: 15px; border-radius: 20px; 
             border: 3px solid #ffd700;
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.4), inset 0 2px 6px rgba(255,255,255,0.3); 
+            box-shadow: 0 10px 30px rgba(153, 0, 0, 0.4), inset 0 2px 6px rgba(255,255,255,0.3); 
             width: 100%;
         }
 
         .spins-counter {
-            font-size: 16px; font-weight: 900; color: #ffd700;
-            text-transform: uppercase; margin-bottom: 10px;
+            font-size: 15px; font-weight: 900; color: #ffd700;
+            text-transform: uppercase; margin-bottom: 8px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
         .nav-btn-box {
@@ -41,21 +41,21 @@
         }
 
         .nav-button {
-            background: rgba(120, 0, 0, 0.8);
+            background: rgba(150, 0, 0, 0.6);
             border: 2px solid #ffd700; border-radius: 30px;
             padding: 8px 14px; color: #fff; font-weight: 700; font-size: 12px;
             display: flex; align-items: center; justify-content: center; gap: 6px;
             cursor: pointer; text-decoration: none; transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             flex: 1;
         }
-        .nav-button:hover { background: rgba(180, 0, 0, 1); transform: translateY(-1px); }
+        .nav-button:hover { background: rgba(200, 0, 0, 0.8); transform: translateY(-1px); }
 
         .user-input-box {
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.35);
             border: 2px solid #ffd700; border-radius: 30px;
             padding: 8px 12px; display: flex; align-items: center;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.6);
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
             margin-bottom: 10px;
         }
         .user-input-box input {
@@ -74,22 +74,23 @@
             position: relative; 
             width: 100%; 
             padding-top: 100%; 
-            background: linear-gradient(135deg, #ff0000, #800000);
+            background: linear-gradient(135deg, #e60000, #730000);
             border-radius: 50%; 
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), inset 0 0 20px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 12px 35px rgba(153, 0, 0, 0.5), inset 0 0 15px rgba(255, 215, 0, 0.5);
             border: 6px solid #ffd700;
             overflow: visible; 
         }
 
-        /* 💡 DÃY ĐÈN LED PHÁT SÁNG XUNG QUANH VIỀN[span_4](start_span)[span_4](end_span) */
+        /* 💡 ĐÈN LED ĐÃ CĂN CHUẨN TUYỆT ĐỐI KHÔNG BỊ LỆCH */
         .led-light {
             position: absolute; width: 12px; height: 12px; background: #fff;
-            border-radius: 50%; box-shadow: 0 0 8px #ffd700, 0 0 15px #ff4500;
+            border-radius: 50%; box-shadow: 0 0 8px #ffd700, 0 0 12px #ff4500;
             z-index: 25; animation: ledGlow 1s infinite alternate;
+            transform: translate(-50%, -50%);
         }
         @keyframes ledGlow {
-            from { background: #fff; box-shadow: 0 0 5px #ffd700; }
-            to { background: #ffd700; box-shadow: 0 0 12px #ff0000, 0 0 20px #ffff00; }
+            from { background: #fff; box-shadow: 0 0 4px #ffd700; }
+            to { background: #ffd700; box-shadow: 0 0 10px #ff0000, 0 0 15px #ffff00; }
         }
 
         .wheel-inner {
@@ -117,18 +118,18 @@
             border-left: 14px solid transparent; 
             border-right: 14px solid transparent;
             border-top: 30px solid #ffd700; 
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.7));
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.6));
             z-index: 30;
         }
 
         .center-btn {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 24%; height: 24%; min-width: 65px; min-height: 65px;
-            background: radial-gradient(circle, #ff4d4d 0%, #cc0000 70%, #5a0000 100%);
+            background: radial-gradient(circle, #ff4d4d 0%, #cc0000 70%, #7a0000 100%);
             border: 3.5px solid #ffd700; border-radius: 50%; 
             color: #fff; font-weight: 900; font-size: 15px; letter-spacing: 0.5px;
             cursor: pointer; z-index: 20; text-align: center;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6), inset 0 2px 6px rgba(255,255,255,0.5);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5), inset 0 2px 6px rgba(255,255,255,0.4);
             transition: all 0.2s;
         }
         .center-btn:hover:not(:disabled) { transform: translate(-50%, -50%) scale(1.08); }
@@ -136,10 +137,9 @@
 
         /* THỂ LỆ */
         .rules-card {
-            background: linear-gradient(145deg, #ffffff, #fff5e6); 
-            color: #333; width: 100%; border-radius: 18px;
-            border: 2.5px solid #ffd700; padding: 18px;
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+            background: #ffffff; width: 100%; border-radius: 18px;
+            border: 2.5px solid #ff4d4d; padding: 18px;
+            box-shadow: 0 8px 25px rgba(210, 47, 47, 0.15);
         }
         .rules-title {
             text-align: center; color: #d32f2f; font-size: 14px; font-weight: 900;
@@ -164,9 +164,9 @@
         }
         .modal-content {
             background: linear-gradient(145deg, #ffffff, #fff5e6); 
-            color: #333; border: 3px solid #d32f2f; padding: 20px 16px;
+            border: 3px solid #d32f2f; padding: 20px 16px;
             border-radius: 22px; width: 90%; max-width: 360px; text-align: center;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
         }
         .modal-content h2 { font-size: 17px; font-weight: 900; color: #d32f2f; margin-bottom: 8px; }
         
@@ -273,14 +273,14 @@
         let currentRotation = 0; 
         let isSpinning = false;
 
-        // 💡 TẠO CÁC ĐÈN LED XUNG QUANH VIỀN TỰ ĐỘNG
+        // 💡 TẠO DÃY ĐÈN LED ÔM KHÍT VÀO VIỀN
         function createLeds() {
             const container = document.getElementById('wheelContainerDiv');
             const totalLeds = 16;
             for (let i = 0; i < totalLeds; i++) {
                 let angle = (i / totalLeds) * 2 * Math.PI;
-                let x = 50 + 44 * Math.sin(angle);
-                let y = 50 - 44 * Math.cos(angle);
+                let x = 50 + 45.5 * Math.sin(angle);
+                let y = 50 - 45.5 * Math.cos(angle);
                 
                 let led = document.createElement('div');
                 led.className = 'led-light';
@@ -315,7 +315,6 @@
             const arcSize = (2 * Math.PI) / numSegments;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Nền tâm canvas
             ctx.beginPath();
             ctx.fillStyle = "#fffaf0";
             ctx.arc(200, 200, 195, 0, 2 * Math.PI);
@@ -355,7 +354,6 @@
                 currentAngle += arcSize;
             }
 
-            // Viền vàng ngoài cùng của canvas
             ctx.beginPath();
             ctx.arc(200, 200, 190, 0, 2 * Math.PI);
             ctx.lineWidth = 4;
