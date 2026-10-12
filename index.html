@@ -23,6 +23,9 @@
             width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ffd700;
             background: #111; color: #fff; font-size: 14px; text-align: center;
         }
+        .user-input-box input:disabled {
+            background: #222; color: #888; border-color: #666;
+        }
         .wheel-container { position: relative; width: 340px; height: 340px; margin: 15px auto; }
         canvas {
             width: 100%; height: 100%; border-radius: 50%;
@@ -35,9 +38,12 @@
         }
         .center-btn {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 70px; height: 70px; background: radial-gradient(circle, #ff3333, #990000);
-            border: 3px solid #ffd700; border-radius: 50%; color: #fff; font-weight: bold; font-size: 15px;
-            cursor: pointer; z-index: 5;
+            width: 75px; height: 75px; background: radial-gradient(circle, #ff3333, #990000);
+            border: 3px solid #ffd700; border-radius: 50%; color: #fff; font-weight: bold; font-size: 13px;
+            cursor: pointer; z-index: 5; text-align: center; line-height: 1.2; padding: 5px;
+        }
+        .center-btn:disabled {
+            background: #555; border-color: #888; color: #ccc; cursor: not-allowed;
         }
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -82,7 +88,6 @@
     </div>
 
     <script>
-        // 🛑 DÁN LINK GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY:
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYYrfTB7RJt70IVLubzuvEKx7m-eey-qjKGotO1JC13JzJOMbBWODOzmP0eYCO3IoS/exec";
 
         let prizes = [];
@@ -141,11 +146,23 @@
         }
 
         async function startSpin() {
-            const userInfo = document.getElementById('userInfoInput').value.trim();
+            // Chặn ngay nếu đang xử lý hoặc đang quay
+            if (isSpinning) return;
+
+            const userInfoInput = document.getElementById('userInfoInput');
+            const spinBtn = document.getElementById('spinBtn');
+            const userInfo = userInfoInput.value.trim();
+
             if (!userInfo) {
                 alert("Vui lòng nhập Tài khoản / SĐT của bạn!");
                 return;
             }
+
+            // Khóa nút QUAY & Ô nhập thông tin lập tức để chống spam click
+            isSpinning = true;
+            spinBtn.disabled = true;
+            userInfoInput.disabled = true;
+            spinBtn.innerText = "ĐANG XỬ LÝ";
 
             // Gọi lên Google Sheets kiểm tra điều kiện
             try {
@@ -154,16 +171,26 @@
                 
                 if (checkData.status === "khong_ton_tai" || checkData.status === "da_quay") {
                     alert(checkData.message);
+                    
+                    // Mở lại nút nếu thông tin không hợp lệ
+                    isSpinning = false;
+                    spinBtn.disabled = false;
+                    userInfoInput.disabled = false;
+                    spinBtn.innerText = "QUAY";
                     return;
                 }
             } catch (e) {
                 alert("❌ Lỗi kiểm tra tài khoản. Vui lòng thử lại!");
+                
+                // Mở lại nút nếu bị lỗi kết nối
+                isSpinning = false;
+                spinBtn.disabled = false;
+                userInfoInput.disabled = false;
+                spinBtn.innerText = "QUAY";
                 return;
             }
 
-            if (isSpinning) return;
-            isSpinning = true;
-            document.getElementById('spinBtn').disabled = true;
+            spinBtn.innerText = "ĐANG QUAY";
 
             // Xử lý tỷ lệ phần trăm trúng thưởng
             let totalRate = prizes.reduce((sum, p) => sum + p.rate, 0);
@@ -201,8 +228,6 @@
                 if (progress < 1) {
                     requestAnimationFrame(animateSpin);
                 } else {
-                    isSpinning = false;
-                    document.getElementById('spinBtn').disabled = false;
                     animateSpin.lastProgress = 0;
 
                     const wonPrize = prizes[winningIndex].name;
@@ -215,9 +240,13 @@
                         body: JSON.stringify({ userInfo: userInfo, prize: wonPrize })
                     });
 
+                    // Hiển thị kết quả
                     document.getElementById('resultText').innerText = wonPrize;
                     document.getElementById('resultModal').style.display = 'flex';
                     confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+
+                    // Giữ nguyên trạng thái đã quay để không cho bấm tiếp
+                    spinBtn.innerText = "ĐÃ QUAY";
                 }
             }
 
