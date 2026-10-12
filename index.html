@@ -92,12 +92,10 @@
         }
         @keyframes rotateLed { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* 🛡️ TRIỆT TIÊU LỖI VỆT TRẮNG: Xóa hẳn background white và box-shadow của canvas */
         canvas {
             width: 100% !important; 
             height: 100% !important;
             border-radius: 50%; 
-            background: transparent; 
             display: block;
         }
 
@@ -282,6 +280,12 @@
             const arcSize = (2 * Math.PI) / numSegments;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+            // ✨ VẼ NỀN VÀNG KIM TUYẾN SANG TRỌNG BÊN TRONG CANVAS (Không dùng CSS background)
+            ctx.beginPath();
+            ctx.fillStyle = "#fff8e7";
+            ctx.arc(200, 200, 195, 0, 2 * Math.PI);
+            ctx.fill();
+
             const baseAngle = 3 * Math.PI / 2;
             let currentAngle = baseAngle + rotationOffset;
 
@@ -292,25 +296,38 @@
                 ctx.arc(200, 200, 190, currentAngle, currentAngle + arcSize, false);
                 ctx.lineTo(200, 200);
                 ctx.fill();
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = "rgba(255,255,255,0.4)";
+                
+                // Viền ngăn cách giữa các ô cực kỳ sắc nét và sang trọng
+                ctx.lineWidth = 3;
+                ctx.strokeStyle = "#ffd700";
                 ctx.stroke();
 
                 ctx.save();
                 ctx.translate(200, 200);
                 ctx.rotate(currentAngle + arcSize / 2);
                 ctx.textAlign = "right";
+                
+                // Hiệu ứng bóng chữ sắc nét, dễ đọc trên mọi màu nền
+                ctx.shadowColor = "rgba(0, 0, 0, 0.7)";
+                ctx.shadowBlur = 4;
                 ctx.fillStyle = "#ffffff";
                 ctx.font = "bold 13px 'Montserrat', sans-serif";
                 
                 let displayName = prizes[i].name;
                 if (displayName.length > 16) displayName = displayName.substring(0, 14) + '...';
                 
-                ctx.fillText(displayName, 172, 5);
+                ctx.fillText(displayName, 168, 5);
                 ctx.restore();
 
                 currentAngle += arcSize;
             }
+
+            // Viền vàng ngoài cùng của vòng quay
+            ctx.beginPath();
+            ctx.arc(200, 200, 190, 0, 2 * Math.PI);
+            ctx.lineWidth = 4;
+            ctx.strokeStyle = "#ffd700";
+            ctx.stroke();
         }
 
         async function startSpin() {
