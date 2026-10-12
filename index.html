@@ -4,87 +4,163 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vòng Quay May Mắn - VPNSIEUCAP</title>
+    <!-- Import Google Font hiện đại -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+        
         body {
-            background: linear-gradient(135deg, #7b0000, #ff1e1e, #3a0000);
-            color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px;
+            background: radial-gradient(circle at center, #1a0505 0%, #0a0101 100%);
+            color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; 
+            justify-content: center; padding: 15px; overflow-x: hidden;
         }
+
+        /* Hiệu ứng nền ánh sáng huyền ảo phía sau */
+        body::before {
+            content: ''; position: absolute; width: 400px; height: 400px;
+            background: rgba(255, 30, 30, 0.15); filter: blur(120px); z-index: -1;
+            top: 10%; left: 50%; transform: translateX(-50%);
+        }
+
+        .main-wrapper {
+            width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center;
+        }
+
         .header-container {
-            text-align: center; margin-bottom: 15px; background: rgba(0, 0, 0, 0.4);
-            padding: 15px 25px; border-radius: 15px; border: 2px solid #ffd700;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); width: 100%; max-width: 480px;
+            text-align: center; margin-bottom: 20px; 
+            background: rgba(25, 10, 10, 0.75);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 20px; border-radius: 20px; 
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 215, 0, 0.15); 
+            width: 100%;
         }
-        h1 { font-size: 22px; color: #ffd700; text-transform: uppercase; margin-bottom: 10px; }
+
+        h1 { 
+            font-size: 22px; font-weight: 900; 
+            background: linear-gradient(135deg, #ffd700, #ff4d4d);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; 
+        }
+
         .user-input-box { margin: 10px 0; text-align: left; }
-        .user-input-box label { font-size: 13px; color: #ffcc00; display: block; margin-bottom: 5px; }
+        .user-input-box label { font-size: 12px; font-weight: 600; color: #ffcc00; display: block; margin-bottom: 6px; letter-spacing: 0.5px; }
+        
         .user-input-box input {
-            width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ffd700;
-            background: #111; color: #fff; font-size: 14px; text-align: center;
+            width: 100%; padding: 12px 15px; border-radius: 12px; 
+            border: 1.5px solid rgba(255, 215, 0, 0.4);
+            background: rgba(10, 5, 5, 0.9); color: #fff; font-size: 15px; font-weight: 600;
+            text-align: center; outline: none; transition: all 0.3s ease;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
         }
-        .user-input-box input:disabled { background: #222; color: #888; border-color: #666; }
-        .wheel-container { position: relative; width: 340px; height: 340px; margin: 15px auto; }
+        .user-input-box input:focus {
+            border-color: #ffd700;
+            box-shadow: 0 0 12px rgba(255, 215, 0, 0.4), inset 0 2px 5px rgba(0,0,0,0.5);
+        }
+        .user-input-box input:disabled { background: #151515; color: #777; border-color: #444; }
+
+        #loadingText { color: #00ffcc; font-size: 12px; font-weight: 600; margin-top: 8px; text-shadow: 0 0 8px rgba(0,255,204,0.4); }
+
+        /* Khung chứa vòng quay */
+        .wheel-container { position: relative; width: 330px; height: 330px; margin: 10px auto; }
+        
         canvas {
             width: 100%; height: 100%; border-radius: 50%;
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); border: 6px solid #ffd700;
+            box-shadow: 0 0 35px rgba(255, 215, 0, 0.35), 0 0 60px rgba(255, 30, 30, 0.2); 
+            border: 6px solid #1a0505;
         }
+
+        /* Kim chỉ hướng cao cấp */
         .wheel-pointer {
-            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-            width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent;
-            border-top: 25px solid #fff; z-index: 10;
+            position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+            width: 0; height: 0; 
+            border-left: 14px solid transparent; 
+            border-right: 14px solid transparent;
+            border-top: 28px solid #ffd700; 
+            filter: drop-shadow(0 3px 6px rgba(0,0,0,0.7));
+            z-index: 10;
         }
+
+        /* Nút quay trung tâm dạng 3D bóng bẩy */
         .center-btn {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 75px; height: 75px; background: radial-gradient(circle, #ff3333, #990000);
-            border: 3px solid #ffd700; border-radius: 50%; color: #fff; font-weight: bold; font-size: 13px;
+            width: 76px; height: 76px; 
+            background: radial-gradient(circle, #ff4d4d 0%, #b30000 70%, #660000 100%);
+            border: 3.5px solid #ffd700; border-radius: 50%; 
+            color: #fff; font-weight: 900; font-size: 14px; letter-spacing: 1px;
             cursor: pointer; z-index: 5; text-align: center; line-height: 1.2; padding: 5px;
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.6), inset 0 3px 6px rgba(255,255,255,0.4);
+            transition: all 0.2s ease;
         }
-        .center-btn:disabled { background: #555; border-color: #888; color: #ccc; cursor: not-allowed; }
+        .center-btn:hover:not(:disabled) { transform: translate(-50%, -50%) scale(1.06); box-shadow: 0 8px 25px rgba(255, 215, 0, 0.7); }
+        .center-btn:active:not(:disabled) { transform: translate(-50%, -50%) scale(0.96); }
+        .center-btn:disabled { background: #333; border-color: #555; color: #888; cursor: not-allowed; box-shadow: none; }
+
+        /* Modal kết quả hiển thị hoành tráng */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000;
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px);
+            justify-content: center; align-items: center; z-index: 1000;
+            animation: fadeIn 0.3s ease;
         }
+        
         .modal-content {
-            background: #2a0000; border: 2px solid #ffd700; padding: 20px;
-            border-radius: 15px; width: 90%; max-width: 400px; text-align: center;
+            background: linear-gradient(145deg, #2a0808, #120202); 
+            border: 2px solid #ffd700; padding: 25px 20px;
+            border-radius: 24px; width: 88%; max-width: 380px; text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8), 0 0 30px rgba(255, 215, 0, 0.3);
+            animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+
+        .modal-content h2 {
+            font-size: 20px; font-weight: 900; color: #ffd700; text-transform: uppercase; margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
         .btn {
-            background: linear-gradient(to bottom, #ffcc00, #ff9900); color: #000; font-weight: bold;
-            padding: 10px 20px; border: none; border-radius: 20px; cursor: pointer; margin-top: 15px; width: 100%;
+            background: linear-gradient(135deg, #ffd700, #ff9900); color: #111; font-weight: 800;
+            padding: 12px 24px; border: none; border-radius: 25px; cursor: pointer; margin-top: 18px; width: 100%;
+            font-size: 14px; text-transform: uppercase; letter-spacing: 1px;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4); transition: all 0.2s ease;
         }
-        #loadingText { color: #ffcc00; font-size: 13px; margin-top: 5px; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6); }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes scaleUp { from { transform: scale(0.7); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="header-container">
-        <h1>VÒNG QUAY VPNSIEUCAP</h1>
-        <div class="user-input-box">
-            <label>Nhập User ID đã đăng ký:</label>
-            <input type="text" id="userInfoInput" placeholder="Nhập User ID của bạn...">
+    <div class="main-wrapper">
+        <div class="header-container">
+            <h1>VPNSIEUCAP</h1>
+            <div class="user-input-box">
+                <label>NHẬP USER ID ĐÃ ĐĂNG KÝ:</label>
+                <input type="text" id="userInfoInput" placeholder="Nhập User ID của bạn...">
+            </div>
+            <div id="loadingText">⏳ Đang kết nối máy chủ bảo mật...</div>
         </div>
-        <div id="loadingText">⏳ Đang tải dữ liệu từ hệ thống...</div>
-    </div>
 
-    <div class="wheel-container">
-        <div class="wheel-pointer"></div>
-        <canvas id="wheelCanvas" width="400" height="400"></canvas>
-        <button class="center-btn" id="spinBtn" onclick="startSpin()" disabled>QUAY</button>
+        <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <canvas id="wheelCanvas" width="400" height="400"></canvas>
+            <button class="center-btn" id="spinBtn" onclick="startSpin()" disabled>QUAY</button>
+        </div>
     </div>
 
     <!-- Modal Kết Quả -->
     <div class="modal" id="resultModal">
         <div class="modal-content">
             <h2>🎉 CHÚC MỪNG BẠN! 🎉</h2>
-            <p id="resultText" style="font-size: 18px; margin: 15px 0; color: #ffcc00; font-weight: bold;"></p>
-            <p style="font-size: 12px; color: #ccc;">VPNSIEUCAP sẽ xác minh và tự động trao phần thưởng cho tài khoản của bạn!</p>
+            <p id="resultText" style="font-size: 18px; margin: 15px 0; color: #ffcc00; font-weight: 800; text-shadow: 0 0 10px rgba(255,204,0,0.4);"></p>
+            <p style="font-size: 11px; color: #ccc; line-height: 1.4;">Hệ thống VPNSIEUCAP sẽ xác minh và tự động cộng thưởng vào tài khoản của bạn!</p>
             <button class="btn" onclick="closeModal()">Đã Hiểu</button>
         </div>
     </div>
 
     <script>
-        // 🛑 DÁN LINK GOOGLE APPS SCRIPT CỦA BẠN VÀO ĐÂY:
+        // 🛑 GIỮ NGUYÊN LINK GOOGLE APPS SCRIPT CỦA BẠN:
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYYrfTB7RJt70IVLubzuvEKx7m-eey-qjKGotO1JC13JzJOMbBWODOzmP0eYCO3IoS/exec";
 
         let prizes = [];
@@ -100,7 +176,7 @@
                 if (data.status === "success" && data.prizes.length > 0) {
                     prizes = data.prizes;
                     drawWheel();
-                    document.getElementById('loadingText').innerText = "✅ Sẵn sàng quay!";
+                    document.getElementById('loadingText').innerText = "✅ Sẵn sàng quay thưởng!";
                     document.getElementById('spinBtn').disabled = false;
                 }
             } catch (err) {
@@ -123,6 +199,8 @@
                 ctx.arc(200, 200, 190, currentAngle, currentAngle + arcSize, false);
                 ctx.lineTo(200, 200);
                 ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "rgba(255,255,255,0.2)";
                 ctx.stroke();
 
                 ctx.save();
@@ -130,12 +208,12 @@
                 ctx.rotate(currentAngle + arcSize / 2);
                 ctx.textAlign = "right";
                 ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 13px Arial";
+                ctx.font = "bold 13px 'Montserrat', sans-serif";
                 
                 let displayName = prizes[i].name;
                 if (displayName.length > 16) displayName = displayName.substring(0, 14) + '...';
                 
-                ctx.fillText(displayName, 170, 5);
+                ctx.fillText(displayName, 172, 5);
                 ctx.restore();
 
                 currentAngle += arcSize;
@@ -154,7 +232,6 @@
                 return;
             }
 
-            // Kiểm tra bộ nhớ trình duyệt để chặn sớm
             let todayKey = "spun_" + userInfo + "_" + new Date().toISOString().slice(0, 10);
             if (localStorage.getItem(todayKey)) {
                 alert("⚠️ Hôm nay bạn đã dùng hết lượt quay! Vui lòng quay lại vào ngày mai.");
@@ -164,11 +241,11 @@
             isSpinning = true;
             spinBtn.disabled = true;
             userInfoInput.disabled = true;
-            spinBtn.innerText = "ĐANG XỬ LÝ";
+            spinBtn.innerText = "XỬ LÝ";
 
             let wonPrize = "";
 
-            // GỌI LỆNH LÊN SERVER: KIỂM TRA & NHẬN KẾT QUẢ QUÀ TỪ MÂY
+            // 🔒 BẢO MẬT SERVER-SIDE: GỌI LÊN MÂY NHẬN KẾT QUẢ QUÀ CHÍNH THỨC
             try {
                 let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=trySpin&sdt=${encodeURIComponent(userInfo)}`);
                 let data = await res.json();
@@ -184,7 +261,7 @@
                 }
 
                 if (data.status === "success") {
-                    wonPrize = data.prize; // Nhận đúng phần thưởng do Server quyết định
+                    wonPrize = data.prize;
                 }
             } catch (e) {
                 alert("❌ Lỗi kết nối máy chủ. Vui lòng thử lại!");
@@ -195,27 +272,25 @@
                 return;
             }
 
-            // Đánh dấu đã quay trên trình duyệt
             localStorage.setItem(todayKey, "true");
-            spinBtn.innerText = "ĐANG QUAY";
+            spinBtn.innerText = "QUAY";
 
-            // Tìm vị trí của phần thưởng trên vòng quay
             let winningIndex = prizes.findIndex(p => p.name === wonPrize);
             if (winningIndex === -1) winningIndex = 0;
 
             const numSegments = prizes.length;
             const arcSize = (2 * Math.PI) / numSegments;
             const targetAngle = 3 * Math.PI / 2 - (winningIndex * arcSize + arcSize / 2);
-            const totalRotation = 10 * Math.PI + (targetAngle - (startAngle % (2 * Math.PI)));
+            const totalRotation = 12 * Math.PI + (targetAngle - (startAngle % (2 * Math.PI)));
 
             let startTime = null;
-            const spinDuration = 4000;
+            const spinDuration = 4500; // Thời gian quay mượt mà 4.5 giây
 
             function animateSpin(timestamp) {
                 if (!startTime) startTime = timestamp;
                 let elapsed = timestamp - startTime;
                 let progress = Math.min(elapsed / spinDuration, 1);
-                let easeProgress = 1 - Math.pow(1 - progress, 3);
+                let easeProgress = 1 - Math.pow(1 - progress, 3); // Hiệu ứng giảm tốc mượt
                 
                 startAngle = startAngle + (totalRotation * (easeProgress - (animateSpin.lastProgress || 0)));
                 animateSpin.lastProgress = easeProgress;
@@ -227,10 +302,9 @@
                 } else {
                     animateSpin.lastProgress = 0;
                     
-                    // Hiển thị phần thưởng chuẩn xác do Server trả về
                     document.getElementById('resultText').innerText = wonPrize;
                     document.getElementById('resultModal').style.display = 'flex';
-                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                    confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
                     spinBtn.innerText = "ĐÃ QUAY";
                 }
             }
