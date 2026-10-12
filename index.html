@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vòng Quay May Mắn - VPNSIEUCAP</title>
+    <title>Vòng Quay Deluxe Gaming - VPNSIEUCAP</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
@@ -119,7 +119,6 @@
         .rules-section p, .rules-section li { font-size: 11px; color: #555; line-height: 1.5; }
         .rules-section ul { padding-left: 16px; }
 
-        /* 🛠️ SỬA LỖI NHÁY TRẮNG: Dùng opacity và visibility thay vì display block/none */
         .modal {
             visibility: hidden; opacity: 0;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -162,7 +161,7 @@
 
     <div class="main-wrapper">
         <div class="header-container">
-            <h1>VÒNG QUAY VPNSIEUCAP</h1>
+            <h1>VÒNG QUAY DELUXE GAMING</h1>
             
             <div class="nav-btn-box">
                 <a href="https://vpnsieucap.shop" target="_blank" class="nav-button">
@@ -198,13 +197,14 @@
             <div class="rules-section">
                 <h4>Cách nhận lượt quay:</h4>
                 <ul>
-                   <li>Mỗi ngày nhận thêm lượt quay tương ứng.</li>
+                    <li>Đăng ký tài khoản mới được tặng 01 lượt quay.</li>
+                    <li>Mỗi đơn hàng hợp lệ được tặng thêm lượt quay tương ứng.</li>
                 </ul>
             </div>
 
             <div class="rules-section">
                 <h4>Phần thưởng:</h4>
-                <p>Mã giảm giá, gói VPN và các phần quà giá trị khác.</p>
+                <p>Mã giảm giá, gói VPN VIP, băng thông tốc độ cao và các phần quà giá trị khác.</p>
             </div>
         </div>
     </div>
@@ -246,6 +246,9 @@
                 let data = await res.json();
                 if (data.status === "success" && data.prizes.length > 0) {
                     prizes = data.prizes;
+                    // Căn chỉnh góc ban đầu để kim ở đỉnh chỉ đúng giữa ô đầu tiên
+                    const arcSize = (2 * Math.PI) / prizes.length;
+                    startAngle = 3 * Math.PI / 2 - arcSize / 2;
                     drawWheel();
                     document.getElementById('loadingText').innerText = "✅ Sẵn sàng quay thưởng!";
                     document.getElementById('spinBtn').disabled = false;
@@ -350,9 +353,16 @@
 
             const numSegments = prizes.length;
             const arcSize = (2 * Math.PI) / numSegments;
-            const targetAngle = 3 * Math.PI / 2 - (winningIndex * arcSize + arcSize / 2);
-            const totalRotation = 12 * Math.PI + (targetAngle - (startAngle % (2 * Math.PI)));
+            
+            // 🎯 Tính toán góc đích cực kỳ chính xác để kim ở đỉnh chỉ đúng giữa ô trúng thưởng
+            const targetStartAngle = 3 * Math.PI / 2 - (winningIndex * arcSize + arcSize / 2);
+            let currentMod = startAngle % (2 * Math.PI);
+            let targetMod = targetStartAngle % (2 * Math.PI);
+            let diff = targetMod - currentMod;
+            if (diff < 0) diff += 2 * Math.PI;
 
+            const totalRotation = 12 * Math.PI + diff;
+            const initialStartAngle = startAngle;
             let startTime = null;
             const spinDuration = 4500;
 
@@ -362,18 +372,14 @@
                 let progress = Math.min(elapsed / spinDuration, 1);
                 let easeProgress = 1 - Math.pow(1 - progress, 3);
                 
-                startAngle = startAngle + (totalRotation * (easeProgress - (animateSpin.lastProgress || 0)));
-                animateSpin.lastProgress = easeProgress;
+                startAngle = initialStartAngle + (totalRotation * easeProgress);
 
                 drawWheel();
 
                 if (progress < 1) {
                     requestAnimationFrame(animateSpin);
                 } else {
-                    animateSpin.lastProgress = 0;
-                    
                     document.getElementById('resultText').innerText = wonPrize;
-                    // Sử dụng class .show để modal hiện mượt mà, không bị nháy sáng trắng
                     document.getElementById('resultModal').classList.add('show');
                     confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
                     spinBtn.innerText = "ĐÃ QUAY";
