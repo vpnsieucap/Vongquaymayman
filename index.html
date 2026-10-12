@@ -247,8 +247,8 @@
             </div>
 
             <div class="rules-section">
-                <h4>Phần thưởng:</h4>
-                <p>Mã giảm giá, gói VPN và các phần quà giá trị khác.</p>
+                <h4>Cách nhận quà khi trúng:</h4>
+                <p>Sau khi quay trúng phần thưởng, bạn chỉ cần bấm vào nút <b style="color: #d32f2f;">⏱ Lịch Sử</b> ở phía trên để xem và sao chép mã quà tặng (Giftcode) của mình.</p>
             </div>
         </div>
     </div>
@@ -258,7 +258,9 @@
         <div class="modal-content">
             <h2>🎉 CHÚC MỪNG BẠN! 🎉</h2>
             <p id="resultText" style="font-size: 16px; margin: 10px 0; color: #d32f2f; font-weight: 800;"></p>
-            <p style="font-size: 11px; color: #666; line-height: 1.4;">Vào mục lịch sử để lấy mã quà tặng nhé!</p>
+            <div style="background: #ffe6e6; border: 1.5px dashed #d32f2f; padding: 8px; border-radius: 10px; margin: 10px 0;">
+                <p style="font-size: 11px; color: #990000; font-weight: 700; line-height: 1.4;">🎁 Hướng dẫn nhận quà:<br>Bấm vào mục <span style="color: #d32f2f;">⏱ Lịch Sử</span> ở trên để copy mã quà tặng!</p>
+            </div>
             <button class="btn-modal" onclick="closeModal()">Đã Hiểu</button>
         </div>
     </div>
@@ -316,7 +318,6 @@
                 let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPrizes`);
                 let data = await res.json();
 
-                // Kiểm tra trạng thái bảo trì
                 if (data.maintenance) {
                     document.getElementById('maintenanceText').innerText = data.maintenanceMessage;
                     document.getElementById('maintenanceModal').classList.add('show');
