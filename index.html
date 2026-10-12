@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vòng Quay Deluxe Gaming - VPNSIEUCAP</title>
+    <title>Vòng Quay May Mắn - VPNSIEUCAP</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
@@ -19,7 +19,6 @@
             width: 100%; max-width: 460px; display: flex; flex-direction: column; align-items: center;
         }
 
-        /* 🔴 KHUNG HEADER ĐỎ VIỀN VÀNG SANG TRỌNG GIỐNG ẢNH MẪU */
         .header-container {
             text-align: center; margin-bottom: 25px; 
             background: linear-gradient(135deg, #d32f2f, #8b0000);
@@ -63,7 +62,6 @@
 
         #loadingText { color: #ffff80; font-size: 11px; font-weight: 600; margin-top: 12px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
-        /* 🎡 KHUNG VÒNG QUAY ĐỎ VIỀN ĐÈN LED GIỐNG ẢNH MẪU */
         .wheel-container { 
             position: relative; width: 360px; height: 360px; margin: 5px auto 25px auto; 
             background: linear-gradient(135deg, #e60000, #730000);
@@ -72,7 +70,6 @@
             border: 4px solid #ffd700;
         }
         
-        /* Hiệu ứng đèn LED giả lập viền */
         .wheel-container::after {
             content: ''; position: absolute; top: 6px; left: 6px; right: 6px; bottom: 6px;
             border-radius: 50%; border: 3px dotted #ffd700; pointer-events: none;
@@ -108,7 +105,6 @@
         .center-btn:hover:not(:disabled) { transform: translate(-50%, -50%) scale(1.05); }
         .center-btn:disabled { background: #444; border-color: #666; color: #990; cursor: not-allowed; }
 
-        /* 📋 BẢNG THỂ LỆ */
         .rules-card {
             background: #ffffff; width: 100%; border-radius: 20px;
             border: 2.5px solid #ff4d4d; padding: 20px;
@@ -123,17 +119,26 @@
         .rules-section p, .rules-section li { font-size: 11px; color: #555; line-height: 1.5; }
         .rules-section ul { padding-left: 16px; }
 
-        /* MODAL CHUNG */
+        /* 🛠️ SỬA LỖI NHÁY TRẮNG: Dùng opacity và visibility thay vì display block/none */
         .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            visibility: hidden; opacity: 0;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(5px);
-            justify-content: center; align-items: center; z-index: 1000;
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal.show {
+            visibility: visible; opacity: 1;
         }
         .modal-content {
             background: linear-gradient(145deg, #ffffff, #fff5e6); 
             border: 3px solid #d32f2f; padding: 22px 18px;
             border-radius: 24px; width: 90%; max-width: 380px; text-align: center;
             box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            transform: scale(0.8); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .modal.show .modal-content {
+            transform: scale(1);
         }
         .modal-content h2 { font-size: 18px; font-weight: 900; color: #d32f2f; margin-bottom: 10px; }
         
@@ -143,7 +148,6 @@
             font-size: 13px; text-transform: uppercase; box-shadow: 0 5px 15px rgba(211, 47, 47, 0.4);
         }
 
-        /* DANH SÁCH LỊCH SỬ TRONG MODAL */
         .history-list {
             max-height: 220px; overflow-y: auto; text-align: left; margin: 12px 0;
             border: 1px solid #ddd; border-radius: 10px; padding: 8px; background: #fff;
@@ -157,9 +161,8 @@
 <body>
 
     <div class="main-wrapper">
-        <!-- HEADER -->
         <div class="header-container">
-            <h1>VÒNG QUAY DELUXE GAMING</h1>
+            <h1>VÒNG QUAY VPNSIEUCAP</h1>
             
             <div class="nav-btn-box">
                 <a href="https://vpnsieucap.shop" target="_blank" class="nav-button">
@@ -178,14 +181,12 @@
             <div id="loadingText">⏳ Đang kết nối máy chủ bảo mật...</div>
         </div>
 
-        <!-- VÒNG QUAY -->
         <div class="wheel-container">
             <div class="wheel-pointer"></div>
             <canvas id="wheelCanvas" width="400" height="400"></canvas>
             <button class="center-btn" id="spinBtn" onclick="startSpin()" disabled>QUAY</button>
         </div>
 
-        <!-- THỂ LỆ -->
         <div class="rules-card">
             <div class="rules-title">📜 Thể lệ vòng quay may mắn</div>
             
@@ -197,19 +198,18 @@
             <div class="rules-section">
                 <h4>Cách nhận lượt quay:</h4>
                 <ul>
-                    <li>Đăng ký tài khoản mới được tặng 01 lượt quay.</li>
-                    <li>Mỗi đơn hàng hợp lệ được tặng thêm lượt quay tương ứng.</li>
+                   <li>Mỗi ngày nhận thêm lượt quay tương ứng.</li>
                 </ul>
             </div>
 
             <div class="rules-section">
                 <h4>Phần thưởng:</h4>
-                <p>Mã giảm giá, gói VPN VIP, băng thông tốc độ cao và các phần quà giá trị khác.</p>
+                <p>Mã giảm giá, gói VPN và các phần quà giá trị khác.</p>
             </div>
         </div>
     </div>
 
-    <!-- MODAL KẾT QUẢ QUAY -->
+    <!-- MODAL KẾT QUẢ -->
     <div class="modal" id="resultModal">
         <div class="modal-content">
             <h2>🎉 CHÚC MỪNG BẠN! 🎉</h2>
@@ -219,7 +219,7 @@
         </div>
     </div>
 
-    <!-- MODAL LỊCH SỬ QUAY -->
+    <!-- MODAL LỊCH SỬ -->
     <div class="modal" id="historyModal">
         <div class="modal-content">
             <h2>⏱ LỊCH SỬ QUAY</h2>
@@ -373,7 +373,8 @@
                     animateSpin.lastProgress = 0;
                     
                     document.getElementById('resultText').innerText = wonPrize;
-                    document.getElementById('resultModal').style.display = 'flex';
+                    // Sử dụng class .show để modal hiện mượt mà, không bị nháy sáng trắng
+                    document.getElementById('resultModal').classList.add('show');
                     confetti({ particleCount: 120, spread: 80, origin: { y: 0.6 } });
                     spinBtn.innerText = "ĐÃ QUAY";
                 }
@@ -391,7 +392,7 @@
 
             document.getElementById('historyUserTitle').innerText = "User ID: " + userInfo;
             document.getElementById('historyListContainer').innerHTML = '<p style="text-align: center; font-size: 11px; color: #888; padding: 20px;">Đang tải lịch sử...</p>';
-            document.getElementById('historyModal').style.display = 'flex';
+            document.getElementById('historyModal').classList.add('show');
 
             try {
                 let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getHistory&sdt=${encodeURIComponent(userInfo)}`);
@@ -413,11 +414,11 @@
         }
 
         function closeModal() {
-            document.getElementById('resultModal').style.display = 'none';
+            document.getElementById('resultModal').classList.remove('show');
         }
 
         function closeHistoryModal() {
-            document.getElementById('historyModal').style.display = 'none';
+            document.getElementById('historyModal').classList.remove('show');
         }
 
         loadPrizesFromSheet();
