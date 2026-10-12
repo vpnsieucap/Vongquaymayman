@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vòng Quay Deluxe Gaming - VPNSIEUCAP</title>
+    <title>Vòng Quay VPNSIEUCAP</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
@@ -19,21 +19,20 @@
             width: 100%; max-width: 440px; display: flex; flex-direction: column; align-items: center;
         }
 
-        /* HEADER & LƯỢT QUAY */
+        /* HEADER & TIÊU ĐỀ */
         .header-container {
             text-align: center; margin-bottom: 15px; 
             background: linear-gradient(135deg, #d32f2f, #8b0000);
-            padding: 15px; border-radius: 20px; 
+            padding: 16px 15px; border-radius: 20px; 
             border: 3px solid #ffd700;
             box-shadow: 0 10px 30px rgba(153, 0, 0, 0.4), inset 0 2px 6px rgba(255,255,255,0.3); 
             width: 100%;
         }
 
-        .spins-counter {
-            font-size: 15px; font-weight: 900; color: #ffd700;
-            text-transform: uppercase; margin-bottom: 8px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-            letter-spacing: 0.5px;
+        h1 { 
+            font-size: 18px; font-weight: 900; color: #ffd700;
+            text-transform: uppercase; margin-bottom: 12px; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); letter-spacing: 0.5px;
         }
 
         .nav-btn-box {
@@ -51,18 +50,24 @@
         }
         .nav-button:hover { background: rgba(200, 0, 0, 0.8); transform: translateY(-1px); }
 
+        /* Ô NHẬP USER ID SÁNG RÕ */
         .user-input-box {
-            background: rgba(0, 0, 0, 0.35);
-            border: 2px solid #ffd700; border-radius: 30px;
-            padding: 8px 12px; display: flex; align-items: center;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.65);
+            border: 2.5px solid #ffd700; border-radius: 30px;
+            padding: 9px 14px; display: flex; align-items: center;
+            box-shadow: inset 0 3px 8px rgba(0,0,0,0.8), 0 4px 10px rgba(0,0,0,0.2);
             margin-bottom: 10px;
         }
         .user-input-box input {
-            width: 100%; border: none; background: transparent; color: #ffd700; 
-            font-size: 13px; font-weight: 700; text-align: center; outline: none;
+            width: 100%; border: none; background: transparent; 
+            color: #ffffff; 
+            font-size: 14px; font-weight: 800; text-align: center; outline: none;
+            letter-spacing: 0.5px;
         }
-        .user-input-box input::placeholder { color: rgba(255, 215, 0, 0.6); font-weight: 600; }
+        .user-input-box input::placeholder { 
+            color: rgba(255, 255, 255, 0.7); 
+            font-weight: 600; 
+        }
 
         #loadingText { color: #ffff80; font-size: 11px; font-weight: 600; margin-top: 8px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
@@ -81,7 +86,6 @@
             overflow: visible; 
         }
 
-        /* 💡 ĐÈN LED ĐÃ CĂN CHUẨN TUYỆT ĐỐI KHÔNG BỊ LỆCH */
         .led-light {
             position: absolute; width: 12px; height: 12px; background: #fff;
             border-radius: 50%; box-shadow: 0 0 8px #ffd700, 0 0 12px #ff4500;
@@ -190,7 +194,7 @@
 
     <div class="main-wrapper">
         <div class="header-container">
-            <div class="spins-counter" id="spinsCounterText">Lượt quay: --</div>
+            <h1>VÒNG QUAY VPNSIEUCAP</h1>
             
             <div class="user-input-box">
                 <input type="text" id="userInfoInput" placeholder="Nhập User ID của bạn...">
@@ -273,7 +277,6 @@
         let currentRotation = 0; 
         let isSpinning = false;
 
-        // 💡 TẠO DÃY ĐÈN LED ÔM KHÍT VÀO VIỀN
         function createLeds() {
             const container = document.getElementById('wheelContainerDiv');
             const totalLeds = 16;
@@ -301,7 +304,6 @@
                     drawWheel(currentRotation);
                     document.getElementById('loadingText').innerText = "✅ Sẵn sàng quay thưởng!";
                     document.getElementById('spinBtn').disabled = false;
-                    document.getElementById('spinsCounterText').innerText = "Lượt quay: 1 (Hôm nay)";
                 }
             } catch (err) {
                 document.getElementById('loadingText').innerText = "❌ Lỗi kết nối máy chủ!";
@@ -397,7 +399,6 @@
                     spinBtn.disabled = false;
                     userInfoInput.disabled = false;
                     spinBtn.innerText = "QUAY";
-                    document.getElementById('spinsCounterText').innerText = "Lượt quay: 0 (Hết lượt)";
                     return;
                 }
 
@@ -415,7 +416,6 @@
 
             localStorage.setItem(todayKey, "true");
             spinBtn.innerText = "QUAY";
-            document.getElementById('spinsCounterText').innerText = "Lượt quay: 0 (Đã quay)";
 
             let winningIndex = prizes.findIndex(p => p.name === wonPrize);
             if (winningIndex === -1) winningIndex = 0;
