@@ -62,7 +62,6 @@
 
         #loadingText { color: #ffff80; font-size: 11px; font-weight: 600; margin-top: 10px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
 
-        /* 🛠️ SỬA LỖI RESPONSIVE: Dùng aspect-ratio để vòng quay luôn tròn và co giãn chuẩn trên mọi màn hình */
         .wheel-container { 
             position: relative; width: 100%; max-width: 340px; aspect-ratio: 1 / 1; 
             margin: 5px auto 20px auto; 
@@ -248,8 +247,6 @@
                 let data = await res.json();
                 if (data.status === "success" && data.prizes.length > 0) {
                     prizes = data.prizes;
-                    const arcSize = (2 * Math.PI) / prizes.length;
-                    startAngle = 3 * Math.PI / 2 - arcSize / 2;
                     drawWheel();
                     document.getElementById('loadingText').innerText = "✅ Sẵn sàng quay thưởng!";
                     document.getElementById('spinBtn').disabled = false;
@@ -355,13 +352,15 @@
             const numSegments = prizes.length;
             const arcSize = (2 * Math.PI) / numSegments;
             
-            const targetStartAngle = 3 * Math.PI / 2 - (winningIndex * arcSize + arcSize / 2);
-            let currentMod = startAngle % (2 * Math.PI);
-            let targetMod = targetStartAngle % (2 * Math.PI);
-            let diff = targetMod - currentMod;
-            if (diff < 0) diff += 2 * Math.PI;
+            // 🎯 THUẬT TOÁN TÍNH TÂM Ô TRÚNG THƯỞNG CHUẨN XÁC 100%
+            // Vị trí hiện tại của tâm ô trúng thưởng
+            let currentSliceCenter = startAngle + (winningIndex * arcSize) + (arcSize / 2);
+            // Đỉnh kim chỉ nằm ở 3 * Math.PI / 2 (-90 độ)
+            let targetTop = 3 * Math.PI / 2;
+            let angleDiff = targetTop - (currentSliceCenter % (2 * Math.PI));
+            if (angleDiff < 0) angleDiff += 2 * Math.PI;
 
-            const totalRotation = 12 * Math.PI + diff;
+            const totalRotation = 12 * Math.PI + angleDiff;
             const initialStartAngle = startAngle;
             let startTime = null;
             const spinDuration = 4500;
