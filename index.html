@@ -62,7 +62,7 @@
         <h1>VÒNG QUAY VPNSIEUCAP</h1>
         <div class="user-input-box">
             <label>Nhập User ID đã đăng ký:</label>
-            <input type="text" id="userInfoInput" placeholder="Nhập tài khoản của bạn...">
+            <input type="text" id="userInfoInput" placeholder="Nhập User ID của bạn...">
         </div>
         <div id="loadingText">⏳ Đang tải dữ liệu từ hệ thống...</div>
     </div>
@@ -154,14 +154,14 @@
                 return;
             }
 
-            // Khóa nút để kiểm tra
             isSpinning = true;
             spinBtn.disabled = true;
             userInfoInput.disabled = true;
             spinBtn.innerText = "ĐANG XỬ LÝ";
 
+            // 🔒 GỌI LỆNH TRỢ GIÚP: KIỂM TRA VÀ KHÓA LƯỢT QUAY NGAY LẬP TỨC TRÊN GOOGLE SHEETS
             try {
-                let checkRes = await fetch(`${GOOGLE_SCRIPT_URL}?sdt=${encodeURIComponent(userInfo)}`);
+                let checkRes = await fetch(`${GOOGLE_SCRIPT_URL}?action=trySpin&sdt=${encodeURIComponent(userInfo)}`);
                 let checkData = await checkRes.json();
                 
                 if (checkData.status === "khong_ton_tai" || checkData.status === "da_quay") {
@@ -173,7 +173,7 @@
                     return;
                 }
             } catch (e) {
-                alert("❌ Lỗi kiểm tra tài khoản. Vui lòng thử lại!");
+                alert("❌ Lỗi kết nối. Vui lòng thử lại!");
                 isSpinning = false;
                 spinBtn.disabled = false;
                 userInfoInput.disabled = false;
@@ -183,6 +183,7 @@
 
             spinBtn.innerText = "ĐANG QUAY";
 
+            // Tính toán kết quả trúng thưởng
             let totalRate = prizes.reduce((sum, p) => sum + p.rate, 0);
             let randomNum = Math.random() * totalRate;
             let currentSum = 0;
@@ -221,16 +222,12 @@
                     animateSpin.lastProgress = 0;
                     const wonPrize = prizes[winningIndex].name;
                     
-                    // 🔒 GỬI KẾT QUẢ VÀ ĐỢI GHI LÊN GOOGLE SHEETS XONG MỚI HIỆN KẾT QUẢ
-                    fetch(`${GOOGLE_SCRIPT_URL}?action=saveSpin&sdt=${encodeURIComponent(userInfo)}&prize=${encodeURIComponent(wonPrize)}`)
-                    .then(() => {
+                    // 🔒 GỬI TÊN PHẦN THƯỞNG THỰC TẾ LÊN CẬP NHẬT VÀO HÀNG ĐÃ KHÓA SẴN
+                    fetch(`${GOOGLE_SCRIPT_URL}?action=updatePrize&sdt=${encodeURIComponent(userInfo)}&prize=${encodeURIComponent(wonPrize)}`)
+                    .finally(() => {
                         document.getElementById('resultText').innerText = wonPrize;
                         document.getElementById('resultModal').style.display = 'flex';
                         confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-                        spinBtn.innerText = "ĐÃ QUAY";
-                    })
-                    .catch(() => {
-                        alert("Đã trúng thưởng nhưng lỗi lưu server. Hãy chụp màn hình lại!");
                         spinBtn.innerText = "ĐÃ QUAY";
                     });
                 }
