@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vòng Quay VPNSIEUCAP</title>
 
-    <!-- Thẻ Meta Open Graph -->
+    <!-- Thẻ Meta Open Graph (Hiển thị ảnh và thông tin khi chia sẻ link lên Facebook, Zalo, v.v.) -->
     <meta property="og:title" content="Vòng Quay VPNSIEUCAP - Quay Thưởng Nhận Quà Khủng">
     <meta property="og:description" content="Tham gia vòng quay may mắn ngay để nhận mã giảm giá, gói VPN và nhiều phần quà hấp dẫn!">
     <meta property="og:image" content="https://thuvienvector.vn/wp-content/uploads/2025/03/vong-quay-may-man-icon.jpg">
@@ -162,7 +162,7 @@
         .rules-section p, .rules-section li { font-size: 11px; color: #555; line-height: 1.4; }
         .rules-section ul { padding-left: 15px; }
 
-        /* MODAL CHUNG */
+        /* MODAL */
         .modal {
             visibility: hidden; opacity: 0;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -196,33 +196,11 @@
             font-size: 11px; padding: 5px 6px; border-bottom: 1px dashed #eee; color: #333;
         }
         .history-item:last-child { border-bottom: none; }
-
-        /* BANNER / THÔNG BÁO BẢO TRÌ TRÊN TRANG */
-        .maintenance-banner {
-            background: linear-gradient(135deg, #fff3cd, #ffeeba);
-            border: 2px dashed #ff9900;
-            color: #856404;
-            padding: 12px 15px;
-            border-radius: 14px;
-            margin-bottom: 15px;
-            width: 100%;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(255, 153, 0, 0.15);
-            display: none; /* Mặc định ẩn, bật lên bằng JS hoặc tuỳ chọn */
-        }
-        .maintenance-banner b { color: #d32f2f; }
     </style>
 </head>
 <body>
 
     <div class="main-wrapper">
-        <!-- BẢNG THÔNG BÁO BẢO TRÌ DẠNG BANNER (Tùy chọn hiển thị) -->
-        <div class="maintenance-banner" id="maintenanceBanner">
-            🛠️ <b>HỆ THỐNG ĐANG BẢO TRÌ:</b> Vòng quay tạm dừng hoạt động từ <b>15:00 - 21:00</b> để nâng cấp hệ thống. Xin lỗi vì sự bất tiện này!
-        </div>
-
         <div class="header-container">
             <h1>VÒNG QUAY VPNSIEUCAP</h1>
             
@@ -297,26 +275,7 @@
         </div>
     </div>
 
-    <!-- MODAL BẢO TRÌ TOÀN MÀN HÌNH (Tùy chọn bật/tắt) -->
-    <div class="modal" id="maintenanceModal">
-        <div class="modal-content">
-            <h2 style="color: #e65100;">🛠️ THÔNG BÁO BẢO TRÌ</h2>
-            <p style="font-size: 12px; color: #444; line-height: 1.5; margin: 10px 0;">
-                Hệ thống vòng quay may mắn đang được bảo trì nâng cấp tính năng để mang lại trải nghiệm mượt mà hơn. Vui lòng quay lại sau!
-            </p>
-            <div style="background: #fff3cd; padding: 8px; border-radius: 8px; font-size: 11px; color: #856404; margin-bottom: 10px;">
-                🕒 Thời gian dự kiến hoàn tất: <b>Sớm ra mắt</b>
-            </div>
-            <a href="https://vpnsieucap.shop" class="btn-modal" style="display: block; text-decoration: none; line-height: normal;">Về Trang Chủ Cửa Hàng</a>
-        </div>
-    </div>
-
     <script>
-        // ================= CẤU HÌNH BẢO TRÌ =================
-        // Chỉnh thành 'true' để bật chế độ bảo trì, 'false' để chạy bình thường
-        const MAINTENANCE_MODE = true; 
-        // ====================================================
-
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYYrfTB7RJt70IVLubzuvEKx7m-eey-qjKGotO1JC13JzJOMbBWODOzmP0eYCO3IoS/exec";
 
         let prizes = [];
@@ -324,18 +283,6 @@
         const ctx = canvas.getContext('2d');
         let currentRotation = 0; 
         let isSpinning = false;
-
-        // Xử lý giao diện khi bật chế độ bảo trì
-        window.addEventListener('DOMContentLoaded', () => {
-            if (MAINTENANCE_MODE) {
-                document.getElementById('maintenanceBanner').style.display = 'block';
-                document.getElementById('loadingText').innerText = "🛠️ Hệ thống đang bảo trì";
-                document.getElementById('spinBtn').disabled = true;
-                document.getElementById('spinBtn').innerText = "BẢO TRÌ";
-                // Nếu muốn hiện popup chặn luôn màn hình, hãy bỏ comment dòng dưới đây:
-                // document.getElementById('maintenanceModal').classList.add('show');
-            }
-        });
 
         function createLeds() {
             const container = document.getElementById('wheelContainerDiv');
@@ -356,8 +303,6 @@
         createLeds();
 
         async function loadPrizesFromSheet() {
-            if (MAINTENANCE_MODE) return; // Nếu đang bảo trì thì không gọi API tải giải thưởng
-
             try {
                 let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPrizes`);
                 let data = await res.json();
@@ -426,10 +371,6 @@
         }
 
         async function startSpin() {
-            if (MAINTENANCE_MODE) {
-                alert("Hệ thống đang bảo trì, không thể quay thưởng lúc này!");
-                return;
-            }
             if (isSpinning) return;
 
             const userInfoInput = document.getElementById('userInfoInput');
