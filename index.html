@@ -281,6 +281,7 @@
 
     <script>
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYYrfTB7RJt70IVLubzuvEKx7m-eey-qjKGotO1JC13JzJOMbBWODOzmP0eYCO3IoS/exec";
+        const SECRET_KEY = "VpnSieuCap@2026SecureKey!"; // Khớp với Secret Key đã cài đặt trong Apps Script
 
         let prizes = [];
         const canvas = document.getElementById('wheelCanvas');
@@ -308,8 +309,13 @@
 
         async function loadPrizesFromSheet() {
             try {
-                let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPrizes`);
+                let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getPrizes&secret=${encodeURIComponent(SECRET_KEY)}`);
                 let data = await res.json();
+
+                if (data.status === "unauthorized") {
+                    document.getElementById('loadingText').innerText = "🚫 Lỗi bảo mật cấu hình!";
+                    return;
+                }
 
                 if (data.maintenance) {
                     document.getElementById('maintenanceText').innerText = data.maintenanceMessage;
@@ -410,9 +416,18 @@
             let wonPrize = "";
 
             try {
-                let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=trySpin&sdt=${encodeURIComponent(userInfo)}`);
+                let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=trySpin&sdt=${encodeURIComponent(userInfo)}&secret=${encodeURIComponent(SECRET_KEY)}`);
                 let data = await res.json();
                 
+                if (data.status === "unauthorized") {
+                    alert(data.message);
+                    isSpinning = false;
+                    spinBtn.disabled = false;
+                    userInfoInput.disabled = false;
+                    spinBtn.innerText = "QUAY";
+                    return;
+                }
+
                 if (data.status === "baotri") {
                     document.getElementById('maintenanceText').innerText = data.message;
                     document.getElementById('maintenanceModal').classList.add('show');
@@ -420,6 +435,7 @@
                     return;
                 }
 
+                // Hiển thị thông báo trả về (Bao gồm cả thông báo đợi 10-20 phút nếu mới tạo acc)
                 if (data.status === "khong_ton_tai" || data.status === "da_quay") {
                     alert(data.message);
                     if (data.status === "da_quay") {
@@ -504,8 +520,14 @@
             document.getElementById('historyModal').classList.add('show');
 
             try {
-                let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getHistory&sdt=${encodeURIComponent(userInfo)}`);
+                let res = await fetch(`${GOOGLE_SCRIPT_URL}?action=getHistory&sdt=${encodeURIComponent(userInfo)}&secret=${encodeURIComponent(SECRET_KEY)}`);
                 let data = await res.json();
+
+                if (data.status === "unauthorized") {
+                    alert(data.message);
+                    closeHistoryModal();
+                    return;
+                }
 
                 if (data.status === "baotri") {
                     document.getElementById('maintenanceText').innerText = data.message;
